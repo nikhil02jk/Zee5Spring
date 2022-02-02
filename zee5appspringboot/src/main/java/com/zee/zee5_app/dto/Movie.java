@@ -1,5 +1,12 @@
 package com.zee.zee5_app.dto;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.zee.zee5_app.exception.InvalidIdLengthException;
 import com.zee.zee5_app.exception.InvalidNameException;
 
@@ -15,45 +22,41 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
+
+@Entity 
+@Table(name="movie")
 public class Movie implements Comparable<Movie>{
 	
-	public Movie(String id, String name, int ageLimit, String cast, String genre, float length, String trailer,
-			String releaseDate, String language) throws InvalidIdLengthException, InvalidNameException {
-		super();
-		this.setId(id);
-		this.setName(name);
-		this.ageLimit = ageLimit;
-		this.cast = cast;
-		this.genre = genre;
-		this.length = length;
-		this.trailer = trailer;
-		this.releaseDate = releaseDate;
-		this.language = language;
-	}
+	
 
-	@Setter(value = AccessLevel.NONE)
+	
+	@Id
 	private String id;
-	@Setter(value = AccessLevel.NONE)
+	
+	@NotBlank
 	private String name;
+	
+	@Max(value=70)
 	private int ageLimit;
+	
+	@NotBlank
 	private String cast;
+	
+	@NotBlank
 	private String genre;
+	
 	private float length;
+	
+	@NotBlank
 	private String trailer;
+	
+	@NotNull
 	private String releaseDate;
+	
+	@NotBlank
 	private String language;
 	
-	public void setId(String id) throws InvalidIdLengthException {
-		if(id.length()<6)
-			throw new InvalidIdLengthException("id length is less than 6");
-		this.id = id;
-	}
 	
-	public void setName(String name) throws InvalidNameException {
-		if(name==null || name=="" || name.length()<2)
-			throw new InvalidNameException("name is not valid");
-		this.name = name;
-	}
 	
 	@Override
 	public int compareTo(Movie o) {
