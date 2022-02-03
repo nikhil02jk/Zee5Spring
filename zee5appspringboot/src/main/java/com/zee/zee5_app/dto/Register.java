@@ -1,22 +1,23 @@
 package com.zee.zee5_app.dto;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.zee.zee5_app.exception.InvalidEmailException;
-import com.zee.zee5_app.exception.InvalidIdLengthException;
-import com.zee.zee5_app.exception.InvalidNameException;
-import com.zee.zee5_app.exception.InvalidPasswordException;
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,39 +27,56 @@ import lombok.ToString;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-@Entity //used for ORM
-@Table(name="reg")
+@AllArgsConstructor
+@Entity
+@Table(name = "register")
 public class Register implements Comparable<Register> {
 	
-	@Id // to consider the key as primary 
-	@Column(name="regid")
-	
+//	public Register(String id, String firstName, String lastName, String email, String password, BigDecimal contactNumber)
+//			throws InvalidIdLengthException, InvalidNameException, InvalidEmailException, InvalidPasswordException {
+//		super();
+//		this.setId(id);
+//		this.setFirstName(firstName);
+//		this.setLastName(lastName);
+//		this.setEmail(email);
+//		this.setPassword(password);
+//		this.contactNumber = contactNumber;
+//	}
+
+	@Id
+	@Column(name = "regId")
 	private String id;
 	
-	@Size(max=50)
+	@Size(max = 50)
 	@NotBlank
 	private String firstName;
 	
-	@Size(max=50)
+	@Size(max = 50)
 	@NotBlank
 	private String lastName;
 	
-	@Size(max=50)
+	@Size(max = 50)
 	@Email
 	private String email;
 	
-	@Size(max=100)
+	@Size(max = 100)
 	@NotBlank
 	private String password;
 	
-	
 	@NotNull
-	private BigDecimal contactNumber;
+	private BigInteger contactNumber;
 	
+	@ManyToMany
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "regId"),
+	inverseJoinColumns = @JoinColumn(name  = "roleId"))
+	private Set<Role> roles = new HashSet<Role>();
+	
+	@OneToOne(mappedBy = "register", cascade = CascadeType.ALL)
+	private Subscription subscription;
+
 	@Override
 	public int compareTo(Register o) {
 		// TODO Auto-generated method stub

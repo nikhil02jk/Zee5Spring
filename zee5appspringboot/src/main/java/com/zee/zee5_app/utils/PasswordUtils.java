@@ -17,7 +17,7 @@ public class PasswordUtils {
 	private static final int ITERATIONS = 10000;
 	private static final int KEY_LENGTH = 256;
 
-	public static String getSalt(int length) {
+	public String getSalt(int length) {
 		StringBuilder returnValue = new StringBuilder(length);
 		for (int i = 0; i < length; i++) {
 			returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
@@ -25,7 +25,7 @@ public class PasswordUtils {
 		return new String(returnValue);
 	}
 
-	public static byte[] hash(char[] password, byte[] salt) {
+	public byte[] hash(char[] password, byte[] salt) {
 		PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
 		Arrays.fill(password, Character.MIN_VALUE);
 		try {
@@ -38,7 +38,7 @@ public class PasswordUtils {
 		}
 	}
 
-	public  String generateSecurePassword(String password, String salt) {
+	public String generateSecurePassword(String password, String salt) {
 		String returnValue = null;
 		byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
 
@@ -47,7 +47,7 @@ public class PasswordUtils {
 		return returnValue;
 	}
 
-	public  boolean verifyUserPassword(String providedPassword, String securedPassword, String salt) {
+	public boolean verifyUserPassword(String providedPassword, String securedPassword, String salt) {
 		boolean returnValue = false;
 
 		// Generate New secure password with the same salt

@@ -1,40 +1,37 @@
 package com.zee.zee5_app;
 
-import javax.sql.DataSource;
-import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.zee.zee5_app.dto.Episode;
 import com.zee.zee5_app.dto.Register;
-import com.zee.zee5_app.repository.UserRepository;
+import com.zee.zee5_app.dto.Role;
+import com.zee.zee5_app.dto.Series;
+import com.zee.zee5_app.dto.Subscription;
+import com.zee.zee5_app.exception.AlreadyExistsException;
+import com.zee.zee5_app.repository.RoleRepository;
+import com.zee.zee5_app.service.EpisodeService;
+import com.zee.zee5_app.service.SeriesService;
+import com.zee.zee5_app.service.SubscriptionService;
 import com.zee.zee5_app.service.UserService;
 
 @SpringBootApplication
 public class Zee5appspringbootApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(Zee5appspringbootApplication.class, args);
-		ConfigurableApplicationContext applicationContext=SpringApplication.run(Zee5appspringbootApplication.class,args);
-		//DataSource dataSource =applicationContext.getBean(DataSource.class);
-		//System.out.println(dataSource!=null);
-		UserService service = applicationContext.getBean(UserService.class);
+		ConfigurableApplicationContext applicationContext =
+				SpringApplication.run(Zee5appspringbootApplication.class, args);
+		RoleRepository roleRepository = applicationContext.getBean(RoleRepository.class);
+		UserService userService = applicationContext.getBean(UserService.class);
 		
-		UserRepository userRepository = applicationContext.getBean(UserRepository.class);
-		Register register=null;
-				try {
-					register = new Register("reg000853", "rrrrr", "sssss", "rrssrr@gmail.com", "rssd123", null);
-					register.setContactNumber(new BigDecimal("9321654870"));
-					Register result = userRepository.save(register);
-					System.out.println(result);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		
+		
 		applicationContext.close();
-		//applicationContext.close();
-		
 	}
 
 }
