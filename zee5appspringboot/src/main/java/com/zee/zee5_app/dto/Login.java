@@ -1,48 +1,45 @@
 package com.zee.zee5_app.dto;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-@EqualsAndHashCode
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "login")
-public class Login implements Comparable<Login> {
-	
-//	public Login(String username, String password, String regId, ROLE role) {
-//		super();
-//		this.username = username;
-//		this.password = password;
-//		this.regId = regId;
-//		this.role = role;
-//	}
+public class Login implements Comparable<Login>{
 	
 	@Id
-	@Email
-	private String username;
-	@NotBlank
+	@Column(name = "username")
+	private String userName;
+    @NotBlank
 	private String password;
-	@NotBlank
-	private String regId;
-	
+
 	@Override
 	public int compareTo(Login o) {
 		// TODO Auto-generated method stub
-		return o.username.compareTo(this.getUsername());
+		return this.userName.compareTo(o.getUserName());
 	}
+	
+    @OneToOne
+    @JoinColumn(name = "regId")
+	private Register register;
 
 }

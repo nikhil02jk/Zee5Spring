@@ -9,63 +9,56 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
+
+import com.zee.zee5_app.exception.InvalidAmountException;
+import com.zee.zee5_app.exception.InvalidIdLengthException;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
-@EqualsAndHashCode
+@Getter
+//@EqualsAndHashCode
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+
 @Entity
 @Table(name = "subscription")
-public class Subscription implements Comparable<Subscription> {
-	
-//	public Subscription(String id, String dateOfPurchase, String expiryDate, float amount, String paymentMode,
-//			String status, String type, String autoRenewal, String regId) throws InvalidIdLengthException {
-//		super();
-//		this.setId(id);
-//		this.dateOfPurchase = dateOfPurchase;
-//		this.expiryDate = expiryDate;
-//		this.amount = amount;
-//		this.paymentMode = paymentMode;
-//		this.status = status;
-//		this.type = type;
-//		this.autoRenewal = autoRenewal;
-//		this.regId = regId;
-//	}
-	
+public class Subscription implements Comparable<Subscription>{
+
 	@Id
-	@Column(name = "subId")
+	@Column(name = "id")
+	@Length(min = 6)
 	private String id;
+	@NotNull 
+    private String dateOfPurchase;
+	
 	@NotNull
-	private String dateOfPurchase;
-	@NotNull
-	private String expiryDate;
-	@NotNull
-	private float amount;
-	@NotBlank
+    private float amount;
 	private String paymentMode;
+	@NotNull
+    private String expiryDate;
 	@NotBlank
-	private String status;
+    private String status;
 	@NotBlank
 	private String type;
 	@NotBlank
-	private String autoRenewal;
-	
-	@OneToOne
-	@JoinColumn(name = "regId")
-	private Register register;
-	
+    private String autoRenewal;
+
 	@Override
 	public int compareTo(Subscription o) {
 		// TODO Auto-generated method stub
 		return this.id.compareTo(o.getId());
 	}
-
+	
+	@OneToOne
+	@JoinColumn(name = "regId")
+	private Register register;
 }

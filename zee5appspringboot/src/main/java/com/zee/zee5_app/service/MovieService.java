@@ -1,17 +1,22 @@
 package com.zee.zee5_app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.naming.NameNotFoundException;
+
 import com.zee.zee5_app.dto.Movie;
 import com.zee.zee5_app.exception.IdNotFoundException;
+import com.zee.zee5_app.exception.InvalidIdLengthException;
+import com.zee.zee5_app.repository.MovieRepository;
 
 public interface MovieService {
 	
 	public String addMovie(Movie movie);
-	public Optional<Movie> getMovieById(String id);
-	public Movie[] getAllMovies();
 	public String deleteMovie(String id) throws IdNotFoundException;
-	public Optional<List<Movie>> getAllMovieDetails();
-
+	public String modifyMovie(String id, Movie movie) throws IdNotFoundException;
+	public Optional<Movie> getMovieById(String id) throws IdNotFoundException, NameNotFoundException, InvalidIdLengthException;
+	public Optional<List<Movie>> getAllMovie() throws NameNotFoundException, InvalidIdLengthException;
+	
 }

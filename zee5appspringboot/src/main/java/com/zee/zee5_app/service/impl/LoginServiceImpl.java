@@ -1,52 +1,68 @@
 package com.zee.zee5_app.service.impl;
 
+import java.io.IOException;
 import java.util.Optional;
+
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zee.zee5_app.dto.Login;
 import com.zee.zee5_app.dto.EROLE;
+import com.zee.zee5_app.dto.Register;
 import com.zee.zee5_app.exception.IdNotFoundException;
 import com.zee.zee5_app.repository.LoginRepository;
 import com.zee.zee5_app.service.LoginService;
 
 @Service
 public class LoginServiceImpl implements LoginService {
-	
-	@Autowired
-	private LoginRepository loginRepository;
 
+
+	@Autowired
+	private LoginRepository repository ;
+	
 	@Override
 	public String addCredentials(Login login) {
 		// TODO Auto-generated method stub
-		Login login2 = loginRepository.save(login);
-		if (login2!=null)
-			return "Success";
-		else
-			return "Fail";
-	}
-
-	@Override
-	public String deleteCredentials(String username) throws IdNotFoundException {
-		// TODO Auto-generated method stub
-		Optional<Login> optional = loginRepository.findById(username);
-		if (optional.isEmpty())
-			throw new IdNotFoundException("Record not found");
-		else {
-			loginRepository.deleteById(username);
-			return "Success";
+		Login login2 = repository.save(login);
+		if (login2 != null) {
+			return "success";
+		} else {
+			return "fail";
 		}
 	}
 
 	@Override
-	public String changePassword(String username, String password) {
+	public String deleteCredentials(String userName) {
+		// TODO Auto-generated method stub
+		
+		Optional<Login> optional;
+		try {
+			optional = repository.findById(userName);
+			if(optional.isEmpty()) {
+				throw new IdNotFoundException("record not found");
+			}
+			else {
+				repository.deleteById(userName);
+				return "login record deleted";
+			}
+		} catch (IdNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "fail";
+		}
+	}
+
+	@Override
+	public String changePassword(String userName, String password) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String changeRole(String username, EROLE role) {
+	public String changeRole(String userName, EROLE role) {
 		// TODO Auto-generated method stub
 		return null;
 	}

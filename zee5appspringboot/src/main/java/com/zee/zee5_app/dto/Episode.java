@@ -6,8 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,43 +21,33 @@ import lombok.ToString;
 
 @Setter
 @Getter
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+
 @Entity
-@Table(name = "episode")
-public class Episode implements Comparable<Episode> {
-	
-//	public Episode(String id, String serId, String name, float length, String location, String trailer) {
-//		super();
-//		this.id = id;
-//		this.serId = serId;
-//		this.name = name;
-//		this.length = length;
-//		this.location = location;
-//		this.trailer = trailer;
-//	}
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "episodeName")}, name = "episodes")
+public class Episode implements Comparable<Movie> {
 	
 	@Id
-	@Column(name = "epiId")
+	@Column(name = "id")
+	@Length(min = 6)
 	private String id;
 	@NotBlank
-	private String name;
-	@NotNull
-	private float length;
-	@NotBlank
-	private String location;
-	private String trailer;
+	private String episodeName;
+	private int length;
+
+	@Override
+	public int compareTo(Movie o) {
+		// TODO Auto-generated method stub
+		return this.id.compareTo(o.getId());
+	}
+	
 	
 	@ManyToOne
-	@JoinColumn(name = "serId")
-	private Series series;
-	
-	@Override
-	public int compareTo(Episode o) {
-		// TODO Auto-generated method stub
-		return o.id.compareTo(this.getId());
-	}
+	//this episode table should have a foreign key
+	@JoinColumn(name = "seriesId")
+	private Series series; //this should take seriesId and that should act as foreign key
 
 }
