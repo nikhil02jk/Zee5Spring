@@ -23,6 +23,8 @@ import com.zee.zee5_app.repository.UserRepository;
 import com.zee.zee5_app.service.LoginService;
 import com.zee.zee5_app.service.UserService;
 
+
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -36,10 +38,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@org.springframework.transaction.annotation.Transactional(rollbackFor = AlreadyExistsException.class)
-	public String addUser(Register register) throws AlreadyExistsException {
+	public Register addUser(Register register) throws AlreadyExistsException {
 		// TODO Auto-generated method stub
 		//make exception for the next line
-		if(repository.existsByEmailAndContactNumber(register.getEmail(), register.getContactNumber()) == true) {
+		boolean status = repository.existsByEmailAndContactNumber(register.getEmail(), register.getContactNumber()) ;
+		if(status) {
 			throw new AlreadyExistsException("this record already exists");
 		}
 		Register register2 = repository.save(register);
@@ -50,14 +53,15 @@ public class UserServiceImpl implements UserService {
 			}
 			String result = service.addCredentials(login);
 			if(result == "success") {
-					return "record added in register and login";
+					//return "record added in register and login";
+				return register2;
 			}
 			else {
-				return "fail";
+				return null;
 			}
 		}	
 		else {
-			return "fail";
+			return null;
 		}
 				
 	}
@@ -70,10 +74,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<Register> getUserById(String id) throws IdNotFoundException, InvalidIdLengthException,
-			InvalidEmailException, InvalidPasswordException, InvalidNameException {
+	public Register getUserById(String id) throws IdNotFoundException {
 		// TODO Auto-generated method stub
-		return repository.findById(id);
+		Optional<Register> optional =  repository.findById(id);
+		if(optional.isEmpty()) {
+			throw new IdNotFoundException("id does not exists");
+		}
+		else {
+			return optional.get();
+		}
 	}
 
 	@Override
@@ -91,18 +100,17 @@ public class UserServiceImpl implements UserService {
 		//cross check with findbyid
 		//use optional here coz findbyid return optional type
 
-			Optional<Register> optional;
+			Register optional;
 			try {
 				optional = this.getUserById(id);
-				if(optional.isEmpty()) {
+				if(optional==null) {
 					throw new IdNotFoundException("record not found");
 				}
 				else {
 					repository.deleteById(id);
 					return "register record deleted";
 				}
-			} catch (IdNotFoundException | InvalidIdLengthException | InvalidEmailException | InvalidPasswordException
-					| InvalidNameException e) {
+			} catch (IdNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw new IdNotFoundException(e.getMessage());
@@ -111,8 +119,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<List<Register>> getAllUserDetails()
-			throws InvalidIdLengthException, InvalidNameException, InvalidEmailException, InvalidPasswordException {
+	public Optional<List<Register>> getAllUserDetails() {
 		// TODO Auto-generated method stub
 		return Optional.ofNullable(repository.findAll());
 	}
