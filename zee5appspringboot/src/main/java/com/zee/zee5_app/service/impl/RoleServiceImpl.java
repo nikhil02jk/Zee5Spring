@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;
 import com.zee.zee5_app.dto.Role;
 import com.zee.zee5_app.exception.IdNotFoundException;
 import com.zee.zee5_app.exception.InvalidEmailException;

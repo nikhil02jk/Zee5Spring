@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.zee.zee5_app.dto.Login;
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;    
 import com.zee.zee5_app.exception.AlreadyExistsException;
 import com.zee.zee5_app.exception.IdNotFoundException;
 import com.zee.zee5_app.exception.InvalidEmailException;
@@ -22,8 +22,6 @@ import com.zee.zee5_app.repository.LoginRepository;
 import com.zee.zee5_app.repository.UserRepository;
 import com.zee.zee5_app.service.LoginService;
 import com.zee.zee5_app.service.UserService;
-
-
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,14 +36,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@org.springframework.transaction.annotation.Transactional(rollbackFor = AlreadyExistsException.class)
-	public Register addUser(Register register) throws AlreadyExistsException {
+	public User addUser(User register) throws AlreadyExistsException {
 		// TODO Auto-generated method stub
 		//make exception for the next line
 		boolean status = repository.existsByEmailAndContactNumber(register.getEmail(), register.getContactNumber()) ;
 		if(status) {
 			throw new AlreadyExistsException("this record already exists");
 		}
-		Register register2 = repository.save(register);
+		User register2 = repository.save(register);
 		if (register2 != null) {
 			Login login = new Login(register.getEmail(), register.getPassword(),register2);
 			if(loginRepository.existsByUserName(register.getEmail())) {
@@ -67,16 +65,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String updateUser(String id, Register register) throws IdNotFoundException {
+	public User updateUser(String id, User register) throws IdNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		
+		if(!this.repository.existsById(id))
+			throw new IdNotFoundException("invalid id");
+		
+		return repository.save(register);
 		//we dont write here coz update is automatically taken care of
 	}
 
 	@Override
-	public Register getUserById(String id) throws IdNotFoundException {
+	public User getUserById(String id) throws IdNotFoundException {
 		// TODO Auto-generated method stub
-		Optional<Register> optional =  repository.findById(id);
+		Optional<User> optional =  repository.findById(id);
 		if(optional.isEmpty()) {
 			throw new IdNotFoundException("id does not exists");
 		}
@@ -86,11 +88,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Register[] getAllUsers()
+	public User[] getAllUsers()
 			throws InvalidIdLengthException, InvalidNameException, InvalidEmailException, InvalidPasswordException {
 		// TODO Auto-generated method stub
-		List<Register> list = repository.findAll();
-		Register[] array = new Register[list.size()];
+		List<User> list = repository.findAll();
+		User[] array = new User[list.size()];
 		return list.toArray(array);
 	}
 
@@ -100,7 +102,7 @@ public class UserServiceImpl implements UserService {
 		//cross check with findbyid
 		//use optional here coz findbyid return optional type
 
-			Register optional;
+			User optional;
 			try {
 				optional = this.getUserById(id);
 				if(optional==null) {
@@ -119,7 +121,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<List<Register>> getAllUserDetails() {
+	public Optional<List<User>> getAllUserDetails() {
 		// TODO Auto-generated method stub
 		return Optional.ofNullable(repository.findAll());
 	}

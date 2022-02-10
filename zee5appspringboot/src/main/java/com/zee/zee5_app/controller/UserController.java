@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;
 import com.zee.zee5_app.exception.AlreadyExistsException;
 import com.zee.zee5_app.exception.IdNotFoundException;
+import com.zee.zee5_app.payload.response.MessageResponse;
 import com.zee.zee5_app.service.UserService;
 
 @RestController //combination of @ResponseBody and @Controller
@@ -41,17 +42,17 @@ public class UserController {
 	//we need to inform when this method should be used so we should specify the endpoint
 	@PostMapping("/addUser")
 	//used ? so we can return any type
-	public ResponseEntity<?> addUser(@Valid @RequestBody Register register) throws AlreadyExistsException {
+	public ResponseEntity<?> addUser(@Valid @RequestBody User register) throws AlreadyExistsException {
 		
 		//1. It should store the received info in database
-		Register result = userService.addUser(register);
+		User result = userService.addUser(register);
 		return ResponseEntity.status(201).body(result);
 		
 		}
 	//retrieve single record
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable("id") String id) throws IdNotFoundException{
-		Register result = userService.getUserById(id);
+		User result = userService.getUserById(id);
 		return ResponseEntity.ok(result);	
 		
 	}
@@ -59,10 +60,10 @@ public class UserController {
 	//retrieve all records
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllUserDetails(){
-		Optional<List<Register>> optional = userService.getAllUserDetails();
+		Optional<List<User>> optional = userService.getAllUserDetails();
 		if(optional.isEmpty()) {
 			Map<String, String> map = new HashMap<>();
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(map);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new MessageResponse("no record found"));
 		}
 		return ResponseEntity.ok(optional.get());	
 		

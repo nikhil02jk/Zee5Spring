@@ -98,6 +98,6 @@ public class Login implements Comparable<Login>{
 	@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
     @JoinColumn(name = "regId")
     @JsonProperty(access = Access.WRITE_ONLY)
-	private Register register;
+	private User register;
 
 }

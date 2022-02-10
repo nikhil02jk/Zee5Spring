@@ -21,7 +21,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.zee.zee5_app.dto.EROLE;
 import com.zee.zee5_app.dto.Episode;
 import com.zee.zee5_app.dto.Movie;
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;
 import com.zee.zee5_app.dto.Role;
 import com.zee.zee5_app.dto.Series;
 import com.zee.zee5_app.dto.Subscription;

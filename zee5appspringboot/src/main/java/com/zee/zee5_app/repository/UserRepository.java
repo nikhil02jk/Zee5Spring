@@ -1,41 +1,28 @@
-//package com.zee.zee5_app.repository;
-//
-//import java.math.BigDecimal;
-//import java.math.BigInteger;
-//
-//import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.stereotype.Repository;
-//
-//import com.zee.zee5_app.dto.Register;
-//
-//@Repository
-//public interface UserRepository extends JpaRepository<Register, String> {
-//
-//	//write the custom jpa method // we will not write any definition just only signature
-//	//its pre-defined in jpa
-//	//Boolean existsByEmail(String email);
-//	//Boolean existsByContactNumber(BigDecimal contactNumber);
-//	Boolean existsByEmailAndContactNumber(String email,BigInteger contactNumber);
-//	
-//}
-
 package com.zee.zee5_app.repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<Register, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
+	
+
 
 	//write the custom jpa method // we will not write any definition just only signature
 	//its pre-defined in jpa
 	//Boolean existsByEmail(String email);
 	//Boolean existsByContactNumber(BigDecimal contactNumber);
-	Boolean existsByEmailAndContactNumber(String email,BigInteger bigInteger);
+	Boolean existsByEmailAndContactNumber(String email,BigInteger contactNumber);
+	                                                              //biginteger
+	Optional<User> findByUserName(String userName);
+	boolean existsById(String id);
+	Optional<User> findById(String id);
+	void deleteById(String id);
 	
 }

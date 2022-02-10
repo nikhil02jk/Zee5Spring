@@ -19,5 +19,8 @@ server:
   servlet:
     context-path: /api
         
-    
+zee5_app:
+  app:
+    jwtSecret:secretKey
+    jwtExpirationMs:86400000    
     

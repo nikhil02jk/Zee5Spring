@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zee.zee5_app.dto.Movie;
-import com.zee.zee5_app.dto.Register;
+import com.zee.zee5_app.dto.User;
 import com.zee.zee5_app.exception.AlreadyExistsException;
 import com.zee.zee5_app.exception.IdNotFoundException;
 import com.zee.zee5_app.exception.InvalidEmailException;
